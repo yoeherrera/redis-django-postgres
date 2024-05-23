@@ -1,11 +1,12 @@
+# chat/consumers.py
+
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-from channels.db import database_sync_to_async
-from .models import Message
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.room_group_name = 'chat_room'
+        self.room_name = 'room'
+        self.room_group_name = 'chat_%s' % self.room_name
 
         # Join room group
         await self.channel_layer.group_add(
@@ -15,14 +16,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         await self.accept()
 
-        # Load the last 10 messages from the database
-        messages = await self.get_last_messages()
-        for message in messages:
-            await self.send(text_data=json.dumps({
-                'username': message.username,
-                'message': message.message,
-            }))
-
     async def disconnect(self, close_code):
         # Leave room group
         await self.channel_layer.group_discard(
@@ -30,13 +23,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
 
+    # Receive message from WebSocket
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
         username = text_data_json['username']
-
-        # Save message to the database
-        await self.save_message(username, message)
 
         # Send message to room group
         await self.channel_layer.group_send(
@@ -48,6 +39,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             }
         )
 
+    # Receive message from room group
     async def chat_message(self, event):
         message = event['message']
         username = event['username']
@@ -57,11 +49,3 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'message': message,
             'username': username
         }))
-
-    @database_sync_to_async
-    def save_message(self, username, message):
-        Message.objects.create(username=username, message=message)
-
-    @database_sync_to_async
-    def get_last_messages(self):
-        return Message.objects.order_by('-timestamp')[:10][::-1]
