@@ -1,102 +1,23 @@
-<!--&lt;!&ndash; chat/templates/chat/room.html &ndash;&gt;-->
-<!--<!DOCTYPE html>-->
-<!--<html>-->
-<!--<head>-->
-<!--    <title>Chat Room</title>-->
-<!--</head>-->
-<!--<body>-->
-<!--    <h2>Welcome to the Chat Room, {{ username }}</h2>-->
-<!--    <div id="chat-log"></div>-->
-<!--    <input id="chat-message-input" type="text" size="100">-->
-<!--    <button id="chat-message-submit">Send</button>-->
-<!--    <script>-->
-<!--        const roomName = 'room';  // Single room name-->
-<!--        const username = '{{ username }}';  // Username of the logged-in user-->
-
-<!--        const chatSocket = new WebSocket(-->
-<!--            'ws://' + window.location.host + '/ws/chat/' + roomName + '/');-->
-
-<!--        chatSocket.onmessage = function(e) {-->
-<!--            const data = JSON.parse(e.data);-->
-<!--            document.querySelector('#chat-log').innerHTML += ('<b>' + data.username + ':</b> ' + data.message + '<br>');-->
-<!--        };-->
-
-<!--        chatSocket.onclose = function(e) {-->
-<!--            console.error('Chat socket closed unexpectedly');-->
-<!--        };-->
-
-<!--        document.querySelector('#chat-message-input').focus();-->
-<!--        document.querySelector('#chat-message-input').onkeyup = function(e) {-->
-<!--            if (e.keyCode === 13) {  // Enter key-->
-<!--                sendMessage();-->
-<!--            }-->
-<!--        };-->
-
-<!--        document.querySelector('#chat-message-submit').onclick = function(e) {-->
-<!--            sendMessage();-->
-<!--        };-->
-
-<!--        function sendMessage() {-->
-<!--            const messageInputDom = document.querySelector('#chat-message-input');-->
-<!--            const message = messageInputDom.value;-->
-<!--            chatSocket.send(JSON.stringify({-->
-<!--                'username': username,  // Send the username along with the message-->
-<!--                'message': message-->
-<!--            }));-->
-<!--            messageInputDom.value = '';-->
-<!--        }-->
-<!--    </script>-->
-<!--</body>-->
-<!--</html>-->
-
-
 <!-- chat/templates/chat/room.html -->
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Chat Room</title>
-</head>
-<body>
-    <h2>Welcome to the Chat Room, {{ username }}</h2>
-    <div id="chat-log"></div>
-    <input id="chat-message-input" type="text" size="100">
-    <button id="chat-message-submit">Send</button>
-    <script>
-        const roomName = 'room';  // Single room name
-        const username = '{{ username }}';  // Username of the logged-in user
 
-        const chatSocket = new WebSocket(
-            'ws://' + window.location.host + '/ws/chat/' + roomName + '/');
+{% extends 'chat/base.html' %}
 
-        chatSocket.onmessage = function(e) {
-            const data = JSON.parse(e.data);
-            document.querySelector('#chat-log').innerHTML += ('<b>' + data.username + ':</b> ' + data.message + '<br>');
-        };
+{% block title %}Chat Room{% endblock %}
 
-        chatSocket.onclose = function(e) {
-            console.error('Chat socket closed unexpectedly');
-        };
-
-        document.querySelector('#chat-message-input').focus();
-        document.querySelector('#chat-message-input').onkeyup = function(e) {
-            if (e.keyCode === 13) {  // Enter key
-                sendMessage();
-            }
-        };
-
-        document.querySelector('#chat-message-submit').onclick = function(e) {
-            sendMessage();
-        };
-
-        function sendMessage() {
-            const messageInputDom = document.querySelector('#chat-message-input');
-            const message = messageInputDom.value;
-            chatSocket.send(JSON.stringify({
-                'username': username,  // Send the username along with the message
-                'message': message
-            }));
-            messageInputDom.value = '';
-        }
-    </script>
-</body>
-</html>
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h2>Chat Room</h2>
+        <div id="chat-log" class="border p-3 mb-3" style="height: 300px; overflow-y: scroll;"></div>
+        <div class="input-group mb-3">
+            <input id="username-input" type="hidden" class="form-control" value="{{ username }}">
+        </div>
+        <div class="input-group">
+            <input id="chat-message-input" type="text" class="form-control" placeholder="Enter your message">
+            <div class="input-group-append">
+                <button id="chat-message-submit" class="btn btn-primary">Send</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,5 +1,3 @@
-# chat/views.py
-
 from django.contrib.auth import authenticate, login as django_login
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -13,7 +11,7 @@ def register(request):
             form.save()
             username = form.cleaned_data.get('username')
             messages.success(request, f'Account created for {username}! You can now log in.')
-            return redirect('login_view')  # Redirect to the login page
+            return redirect('chat:login_view')  # Ensure correct namespace
     else:
         form = CustomUserCreationForm()
     return render(request, 'chat/register.html', {'form': form})
@@ -21,7 +19,7 @@ def register(request):
 def index(request):
     username = request.session.get('username')
     if not username:
-        return redirect('login_view')
+        return redirect('chat:login_view')
     return render(request, 'chat/index.html', {'username': username})
 
 def login_view(request):
@@ -31,7 +29,7 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             django_login(request, user)
-            return redirect('room')  # Redirect to the chat room
+            return redirect('chat:room')  # Ensure correct namespace
         else:
             return render(request, 'chat/login.html', {'error': 'Invalid username or password'})
     else:

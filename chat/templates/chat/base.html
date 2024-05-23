@@ -1,13 +1,28 @@
 <!-- chat/templates/chat/base.html -->
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>{% block title %}Chat{% endblock %}</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Django App{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'chat/css/styles.css' %}">
 </head>
 <body>
-    <div class="container">
-        {% block content %}{% endblock %}
+    <header>
+        <h1>Welcome to My Django App</h1>
+    </header>
+    <nav>
+        <a href="{% url 'chat:index' %}">Home</a>
+        <a href="{% url 'chat:register' %}">Register</a>
+        <a href="{% url 'chat:login_view' %}">Login</a>
+        <a href="{% url 'chat:room' %}">Chat Room</a>
+    </nav>
+    <div class="content">
+        {% block content %}
+        {% endblock %}
     </div>
+    <script src="{% static 'chat/js/main.js' %}"></script>
 </body>
 </html>
