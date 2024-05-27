@@ -34,7 +34,7 @@ jobs:
 
     - name: Deploy to EC2
       run: |
-        ssh -o StrictHostKeyChecking=no cloud_user@54.204.74.4 << 'EOF'
+        ssh -o StrictHostKeyChecking=no cloud_user@{{ secrets.IP_ADDRESS }} << 'EOF'
           cd /path/to/your/app
           docker-compose down
           git pull origin main
