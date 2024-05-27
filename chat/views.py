@@ -37,4 +37,9 @@ def login_view(request):
 
 @login_required
 def room(request):
-    return render(request, 'chat/room.html', {'username': request.user.username})
+    username = request.user.username
+    welcome_message = f"Welcome to the chat, {username}!"
+    return render(request, 'chat/room.html', {
+        'username': username,
+        'welcome_message': welcome_message,
+    })

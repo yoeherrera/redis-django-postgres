@@ -1,10 +1,13 @@
-<!-- chat/templates/chat/room.html -->
-
 {% extends 'chat/base.html' %}
 
 {% block title %}Chat Room{% endblock %}
 
 {% block content %}
+
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/chat.css' %}">
+
 <div class="row">
     <div class="col-md-8 offset-md-2">
         <h2>Chat Room</h2>
@@ -20,4 +23,7 @@
         </div>
     </div>
 </div>
+
+<script src="{% static 'js/main.js' %}"></script>
+
 {% endblock %}

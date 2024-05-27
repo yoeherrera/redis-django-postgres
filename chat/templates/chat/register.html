@@ -5,10 +5,16 @@
 {% block title %}Register{% endblock %}
 
 {% block content %}
+
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/chat.css' %}">
+
 <h2>Register</h2>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Register</button>
 </form>
+
 {% endblock %}

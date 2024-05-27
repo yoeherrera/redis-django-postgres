@@ -5,6 +5,11 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
+
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/chat.css' %}">
+
 <h2>Login</h2>
 <form method="post">
     {% csrf_token %}
@@ -21,4 +26,5 @@
 {% if error %}
     <p class="text-danger">{{ error }}</p>
 {% endif %}
+
 {% endblock %}
