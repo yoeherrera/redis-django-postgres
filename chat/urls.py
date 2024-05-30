@@ -8,4 +8,5 @@ urlpatterns = [
     path('room/', views.room, name='room'),
     path('', views.index, name='index'),
     path('api/', views.index, name='index'),
+    path('/', views.index, name='index'),
 ]

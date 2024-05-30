@@ -1,0 +1,32 @@
+/* chat/static/css/chat.css */
+
+/* Chat Log */
+#chat-log {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  height: 300px;
+  overflow-y: scroll;
+}
+
+/* Input Field */
+#chat-message-input {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 8px;
+}
+
+/* Submit Button */
+#chat-message-submit {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 20px;
+  cursor: pointer;
+}
+
+/* Submit Button Hover Effect */
+#chat-message-submit:hover {
+  background-color: #0056b3;
+}

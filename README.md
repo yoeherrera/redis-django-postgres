@@ -6,7 +6,6 @@ This is a real-time chat application built with Django, Channels, PostgreSQL, Re
 
 - **User Authentication**: Secure login and registration.
 - **Real-Time Messaging**: Messages are delivered in real-time using Django Channels and Redis.
-- **Multiple Chat Rooms**: Users can create and join multiple chat rooms.
 - **Throttling**: Rate limiting to prevent abuse.
 - **Logging**: Comprehensive logging for debugging and monitoring.
 - **Testing**: Integration and unit tests using Selenium and Django's testing framework.
@@ -23,7 +22,7 @@ This is a real-time chat application built with Django, Channels, PostgreSQL, Re
 
 ### Prerequisites
 
-- Python 3.11
+- Python
 - PostgreSQL
 - Redis
 - Google Chrome (for Selenium)
@@ -33,13 +32,13 @@ This is a real-time chat application built with Django, Channels, PostgreSQL, Re
 
 1. **Clone the repository:**
    ```sh
-   git clone https://github.com/your-username/your-repo.git
-   cd your-repo
+   git clone https://github.com/yoeherrera/redis-django-postgres.git
+   cd redis-django-postgres
 
 2. **Create a virtual environment and activate it:**
    ```sh
     python -m venv venv
-    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+    source venv/bin/activate  # On Windows use `venv\Scripts\activate` or you could also use conda
 
 3. **Install the dependencies:**
    ```sh
@@ -212,3 +211,7 @@ your-repo/
 ├── requirements.txt
 
 ├── README.md
+
+## Acknowledgements
+
+Thanks to the Django, Redis, PostgreSQL, and Docker communities for their excellent documentation and support. And also to ChatGPT

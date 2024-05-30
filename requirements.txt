@@ -6,3 +6,5 @@ channels
 channels_redis
 daphne
 djangorestframework
+python-dotenv
+selenium

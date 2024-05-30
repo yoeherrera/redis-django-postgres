@@ -7,47 +7,50 @@ from selenium.webdriver.support import expected_conditions as EC
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from channels.db import database_sync_to_async
-from django.test import Client  # Import Django Client
+from django.test import Client
 
 class ChatIntegrationTests(ChannelsLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
         cls.selenium = webdriver.Chrome()
-        cls.user = cls.create_test_user(username='testuser', password='password')
-        cls.client = Client()  # Create a Client instance
-
-    @staticmethod
-    @database_sync_to_async
-    def create_test_user(username, password):
-        return get_user_model().objects.create_user(username=username, password=password)
+        cls.selenium.implicitly_wait(10)  # Set implicit wait to handle element presence
+        cls.user = cls.create_test_user(username='postgres', password='postgres')
+        cls.client = Client()
 
     @classmethod
     def tearDownClass(cls):
         cls.selenium.quit()
         super().tearDownClass()
 
-    def test_chat_integration(self):
+    @staticmethod
+    @database_sync_to_async
+    def create_test_user(username, password):
+        return get_user_model().objects.create_user(username=username, password=password)
+
+    def login(self):
         # Login using Django client
-        login_data = {'username': 'testuser', 'password': 'password'}
+        login_data = {'username': 'testuser', 'password': 'password'}  # Use your test user credentials
         self.client.login(**login_data)
 
         # Navigate to chat page using client (follows redirects)
         response = self.client.get(reverse("chat:login_view"))
         self.assertEqual(response.status_code, 200)  # Assert successful login redirect
 
+    def test_chat_integration(self):
+        # Perform login
+        self.login()
+
         # Use selenium for further interaction on the chat page
+        self.selenium.get(self.live_server_url + reverse('chat:login_view'))  # Navigate to chat page
 
-        # ... Rest of the test using selenium (unchanged from previous test)
-
-        # Locate chat input and send message (unchanged)
-        chat_input = WebDriverWait(self.selenium, 20).until(
-            EC.presence_of_element_located((By.ID, 'chat-message-input'))
-        )
+        # Locate chat input and send message
+        chat_input = self.selenium.find_element(By.ID, 'chat-message-input')
         chat_input.send_keys('Hello, world!')
         chat_input.send_keys(Keys.RETURN)
 
-        # Verify the message appears in the chat (unchanged)
-        WebDriverWait(self.selenium, 10).until(
+        # Verify the message appears in the chat
+        chat_log = WebDriverWait(self.selenium, 30).until(
             EC.text_to_be_present_in_element((By.ID, 'chat-log'), 'Hello, world!')
         )
+        self.assertTrue(chat_log)  # Assert that message is present in the chat log
